@@ -4,7 +4,13 @@ class Search extends Component {
       
     onSubmit(e){
              e.preventDefault();
-             console.log('Submitted');
+            let username=this.refs.username.value.trim();
+            if(!username){
+                alert('please enter a valid username');
+                return;
+            }
+            this.props.onFormSubmit(username);
+            this.refs.username.value='';
        }
     
        render() {

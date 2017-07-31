@@ -43,17 +43,22 @@ class App extends Component{
            }.bind(this) 
        });
    }
-
+    
+   handeFormSubmit(username){
+           this.setState({username:username},function(){
+                 this.getUserData();       
+                 this.getUserRepos();
+           });
+   }
 
     componentDidMount(){
-        this.getUserData();       
-        this.getUserRepos();
+        
     }
 
     render(){
         return(
             <div className="container">
-                <Search />
+                <Search onFormSubmit={this.handeFormSubmit.bind(this)}/>
                 <Profile {...this.state}/>
             </div>
         )
