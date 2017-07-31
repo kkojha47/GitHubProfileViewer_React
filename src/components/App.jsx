@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import Profile from './github/Profile.jsx';
+import Search from './github/Search.jsx';
 
 class App extends Component{
     constructor(props){
@@ -11,11 +13,48 @@ class App extends Component{
             perPage:5
         }
     }
-      
+    //get User Data from GitHub
+   getUserData(){
+       $.ajax({
+           url:'https://api.github.com/users/'+this.state.username+'?client_id='+this.props.clientId+'&client_secret='+this.props.clientSecret,
+           datatype: 'json',
+           cache: false,
+           success: function(data){
+               this.setState({userData:data})
+              }.bind(this),
+           error: function(xhr,status,err){
+               alert(err);
+           }.bind(this) 
+       });
+   }
+
+   //get User Repos
+   getUserRepos(){
+       $.ajax({
+           url:'https://api.github.com/users/'+this.state.username+'/repos?per_page='+this.state.perPage+'&client_id='+this.props.clientId+'&client_secret='+this.props.clientSecret+'&sort=ceated',
+           datatype: 'json',
+           cache: false,
+           success: function(data){
+               this.setState({userRepos:data})
+                console.log(data);
+              }.bind(this),
+           error: function(xhr,status,err){
+               alert(err);
+           }.bind(this) 
+       });
+   }
+
+
+    componentDidMount(){
+        this.getUserData();       
+        this.getUserRepos();
+    }
+
     render(){
         return(
             <div className="container">
-                {this.state.username}
+                <Search />
+                <Profile {...this.state}/>
             </div>
         )
     }
